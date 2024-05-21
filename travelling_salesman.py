@@ -58,6 +58,13 @@ def fitness(path):
   return total_fitness
 
 def crossover(parent1, parent2):
+  # Initialize the crossover offspring as copies of the parents
+  offspring1 = parent1[:]
+  offspring2 = parent2[:]
+
+  if random.random() > CROSSOVER_RATE:
+    return offspring1, offspring2
+  
   # Choose two random crossover points
   size = len(parent1)
   crossover_point1 = random.randint(0, size)
@@ -67,10 +74,6 @@ def crossover(parent1, parent2):
     crossover_point2 += 1
   else:
     crossover_point1, crossover_point2 = crossover_point2, crossover_point1
-
-  # Initialize the crossover offspring as copies of the parents
-  offspring1 = parent1[:]
-  offspring2 = parent2[:]
 
   # Apply crossover between the two crossover points
   for i in range(crossover_point1, crossover_point2):
@@ -86,13 +89,16 @@ def crossover(parent1, parent2):
   return offspring1, offspring2
 
 def mutate(path):
+  # Create a copy of the path
+  mutated_path = path[:]
+
   if random.random() < MUTATION_RATE:
     # Select two random positions to swap
-    pos1, pos2 = random.sample(range(len(path)), 2)
+    pos1, pos2 = random.sample(range(len(mutated_path)), 2)
     # Swap the elements at the selected positions
-    path[pos1], path[pos2] = path[pos2], path[pos1]
+    mutated_path[pos1], mutated_path[pos2] = mutated_path[pos2], mutated_path[pos1]
 
-  return path
+  return mutated_path
 
 population = random_population()
 fitness_history = []
@@ -105,6 +111,10 @@ for generation in range(1, MAX_GENERATIONS + 1):
 
   if not REAL_TIME:
     print(f"Generation {generation} | Fitness {best_fitness}")
+
+  if REAL_TIME:
+    show_graph(generation, best_fitness, fitness_history, population[0])
+    plt.pause(0.01)
 
   fitness_history.append(best_fitness)
 
@@ -120,10 +130,6 @@ for generation in range(1, MAX_GENERATIONS + 1):
   child2 = mutate(child2)
 
   population[-2:] = child1, child2
-
-  if REAL_TIME:
-    show_graph(generation, best_fitness, fitness_history, population[0])
-    plt.pause(0.01)
 
 show_graph(
   MAX_GENERATIONS, 

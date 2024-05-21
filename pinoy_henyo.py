@@ -3,13 +3,13 @@ import string
 import matplotlib.pyplot as plt
 from chart import show_fitness_history
 
-TARGET_WORD = "colorado"
+TARGET_WORD = "markkennethcalendario"
 POPULATION_SIZE = 10
 MAX_GENERATIONS = 50000
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 0.4
-REAL_TIME = False
-CHARACTER_SET = string.ascii_letters + " "
+REAL_TIME = not True
+CHARACTER_SET = string.ascii_lowercase
 
 def generate_random_string():
   random_string = ''
@@ -30,14 +30,17 @@ def initialize_population():
   return population
 
 def crossover(parent1, parent2):
+  # Create copy of the parents so it won't change the original value
+  offspring1 = list(parent1)[:]
+  offspring2 = list(parent2)[:]
+  
+  if random.random() > CROSSOVER_RATE:
+    return offspring1, offspring2
+  
   # Choose two random crossover points
   size = len(parent1)
   crossover_point1 = random.randint(0, size - 1)
   crossover_point2 = random.randint(crossover_point1 + 1, size)
-
-  # Initialize the crossover offspring as copies of the parents
-  offspring1 = list(parent1)[:]
-  offspring2 = list(parent2)[:]
 
   # Initialize dictionaries to keep track of character mapping
   mapping1 = {}
@@ -68,10 +71,16 @@ def crossover(parent1, parent2):
   return ''.join(offspring1), ''.join(offspring2)
 
 def mutate(string):
-  mutated_string = list(string)
+  # Create copy of the string so it won't change the original value
+  mutated_string = list(string)[:]
+
+  if random.random() > MUTATION_RATE:
+    return mutated_string
+  
+  target_pos = random.randint(0, len(string))
 
   for i in range(len(mutated_string)):
-    if random.random() < MUTATION_RATE:
+    if target_pos == i:
       mutated_string[i] = random.choice(CHARACTER_SET)
 
   return ''.join(mutated_string)
