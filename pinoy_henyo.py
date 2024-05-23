@@ -3,12 +3,14 @@ import string
 import matplotlib.pyplot as plt
 from chart import show_fitness_history
 
-TARGET_WORD = "markkennethcalendario"
+plt.figure(figsize=(7, 5))
+
+TARGET_WORD = "colorado"
 POPULATION_SIZE = 10
 MAX_GENERATIONS = 50000
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 0.4
-REAL_TIME = not True
+REAL_TIME = False
 CHARACTER_SET = string.ascii_lowercase
 
 def generate_random_string():
@@ -96,7 +98,6 @@ def fitness(string):
 
 population = initialize_population()
 fitness_history = []
-plt.figure(figsize=(7, 5))
 
 for generation in range(1, MAX_GENERATIONS + 1):
   population.sort(key=fitness)
@@ -126,8 +127,7 @@ for generation in range(1, MAX_GENERATIONS + 1):
   child1 = mutate(child1)
   child2 = mutate(child2)
 
-  population[-1] = child2
-  population[-2] = child1
+  population[-1:] = child1, child2
 
 show_fitness_history(fitness_history)
 plt.show()
