@@ -10,7 +10,7 @@ POPULATION_SIZE = 10
 MAX_GENERATIONS = 50000
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 0.4
-REAL_TIME = False
+REAL_TIME = True
 CHARACTER_SET = string.ascii_lowercase
 
 def generate_random_string():
@@ -114,7 +114,7 @@ for generation in range(1, MAX_GENERATIONS + 1):
 
   population[-1:] = child1, child2
 
-  result = f"Generation {generation} | Fitness {best_fitness}: {best_word}"
+  result = f"Generation {generation} | Fitness {best_fitness} | Word: {best_word}"
   
   if REAL_TIME:
     plt.clf()
