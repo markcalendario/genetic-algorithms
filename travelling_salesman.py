@@ -3,6 +3,8 @@ import math
 from chart import show_graph
 import matplotlib.pyplot as plt
 
+plt.figure(figsize=(12, 6))
+
 # Constants
 NUM_AREAS = 10
 MAX_GENERATIONS = 5000
@@ -103,8 +105,6 @@ def mutate(path):
 population = random_population()
 fitness_history = []
 
-plt.figure(figsize=(12, 6))
-
 for generation in range(1, MAX_GENERATIONS + 1):
   population.sort(key=fitness)
   best_fitness = fitness(population[0])
@@ -129,7 +129,7 @@ for generation in range(1, MAX_GENERATIONS + 1):
   child1 = mutate(child1)
   child2 = mutate(child2)
 
-  population[-2:] = child1, child2
+  population[-1:] = child1, child2
 
 show_graph(
   MAX_GENERATIONS, 
