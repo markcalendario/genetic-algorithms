@@ -18,17 +18,31 @@ class Area:
     self.x = x
     self.y = y
 
+# # Original Areas
+# areas = [
+#   Area("Gate", 2, 5),
+#   Area("Court", 7, 15),
+#   Area("Catwalk", 15, 8),
+#   Area("Obelisk", 13, 12),
+#   Area("Lagoon", 19, 15),
+#   Area("Gym", 2, 10),
+#   Area("Oval", 5, 9),
+#   Area("Chapel", 7, 18),
+#   Area("Pool", 13, 5),
+#   Area("Main Building", 20, 4),
+# ]
+
 areas = [
-  Area("Gate", 2, 5),
-  Area("Court", 7, 15),
-  Area("Catwalk", 15, 8),
-  Area("Obelisk", 13, 12),
-  Area("Lagoon", 19, 15),
-  Area("Gym", 2, 10),
-  Area("Oval", 5, 9),
-  Area("Chapel", 7, 18),
-  Area("Pool", 13, 5),
-  Area("Main Building", 20, 4),
+  Area("PUP Main Gate", 2, 4),
+  Area("Lagoon", 6, 5),
+  Area("Obelisk", 10, 5),
+  Area("PUP Oval", 7, 8),
+  Area("Gymnasium", 4, 7),
+  Area("Main Building", 7, 4),
+  Area("Chapel", 11, 6),
+  Area("Pool", 10, 8),
+  Area("Library", 9, 3),
+  Area("Linear Park", 11, 4),
 ]
 
 def calculate_distance(area1, area2):
