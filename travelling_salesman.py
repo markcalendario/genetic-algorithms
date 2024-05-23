@@ -5,22 +5,19 @@ import matplotlib.pyplot as plt
 
 plt.figure(figsize=(12, 6))
 
-# Constants
 NUM_AREAS = 10
 MAX_GENERATIONS = 5000
 POPULATION_SIZE = 10
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 0.4
-REAL_TIME = True
+REAL_TIME = False
 
-# Area class
 class Area:
   def __init__(self, name, x, y):
     self.name = name
     self.x = x
     self.y = y
 
-# Areas
 areas = [
   Area("Gate", 2, 5),
   Area("Court", 7, 15),
@@ -60,7 +57,6 @@ def fitness(path):
   return total_fitness
 
 def crossover(parent1, parent2):
-  # Initialize the crossover offspring as copies of the parents
   offspring1 = parent1[:]
   offspring2 = parent2[:]
 
@@ -91,7 +87,6 @@ def crossover(parent1, parent2):
   return offspring1, offspring2
 
 def mutate(path):
-  # Create a copy of the path
   mutated_path = path[:]
 
   if random.random() < MUTATION_RATE:
@@ -109,13 +104,6 @@ for generation in range(1, MAX_GENERATIONS + 1):
   population.sort(key=fitness)
   best_fitness = fitness(population[0])
 
-  if not REAL_TIME:
-    print(f"Generation {generation} | Fitness {best_fitness}")
-
-  if REAL_TIME:
-    show_graph(generation, best_fitness, fitness_history, population[0])
-    plt.pause(0.01)
-
   fitness_history.append(best_fitness)
 
   parent1 = population[0]
@@ -131,10 +119,11 @@ for generation in range(1, MAX_GENERATIONS + 1):
 
   population[-1:] = child1, child2
 
-show_graph(
-  MAX_GENERATIONS, 
-  fitness(population[0]), 
-  fitness_history, 
-  population[0]
-)
+  if REAL_TIME:
+    show_graph(generation, best_fitness, fitness_history, population[0])
+    plt.pause(0.01)
+  else:
+    print(f"Generation {generation} | Fitness {best_fitness}")
+
+show_graph(MAX_GENERATIONS, fitness(population[0]), fitness_history, population[0])
 plt.show()

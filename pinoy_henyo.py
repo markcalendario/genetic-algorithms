@@ -108,26 +108,25 @@ for generation in range(1, MAX_GENERATIONS + 1):
   best_fitness = fitness(best_word)
   fitness_history.append(best_fitness)
 
-  print(f"Generation {generation} | Fitness {best_fitness}: {best_word}")
-  
-  if REAL_TIME:
-    plt.clf()
-    plt.suptitle(
-      f"Generation {generation} | Fitness {best_fitness} | Word {best_word}",
-      weight="bold"
-    )
-    show_fitness_history(fitness_history)
-    plt.pause(0.01)
-
-  if best_word == TARGET_WORD:
-    print(f"Found target word '{TARGET_WORD}' in {generation} generations.")
-    break
-
   child1, child2 = crossover(parent1, parent2)
   child1 = mutate(child1)
   child2 = mutate(child2)
 
   population[-1:] = child1, child2
+
+  result = f"Generation {generation} | Fitness {best_fitness}: {best_word}"
+  
+  if REAL_TIME:
+    plt.clf()
+    plt.suptitle(result, weight="bold")
+    show_fitness_history(fitness_history)
+    plt.pause(0.01)
+  else:
+    print(result)
+
+  if best_word == TARGET_WORD:
+    print(f"Found target word '{TARGET_WORD}' in {generation} generations.")
+    break
 
 show_fitness_history(fitness_history)
 plt.show()
