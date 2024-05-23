@@ -3,10 +3,10 @@ import string
 import matplotlib.pyplot as plt
 from chart import show_fitness_history
 
-plt.figure(figsize=(7, 5))
+plt.figure(figsize=(12, 5))
 
-TARGET_WORD = "colorado"
-POPULATION_SIZE = 10
+TARGET_WORD = input("Enter a word to guess by the guesser: ")
+POPULATION_SIZE = 100
 MAX_GENERATIONS = 50000
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 0.4
