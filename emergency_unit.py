@@ -1,14 +1,15 @@
 import random, math
 import matplotlib.pyplot as plt
+import numpy as np
 from chart import show_fitness_history
 
 plt.figure(figsize=(12, 6))
 
 POPULATION_SIZE = 10
-MAX_GENERATIONS = 50000
+MAX_GENERATIONS = 5000
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 0.4
-REAL_TIME = False
+REAL_TIME = True
 CITY_MATRIX = [
     [5, 2, 4, 8, 9, 0, 3, 3, 8, 7],
     [5, 5, 3, 4, 4, 6, 4, 1, 9, 1],
@@ -67,12 +68,26 @@ def real_coordinates(coordinates):
   real_coordinates = [coordinates[0] + 1, coordinates[1] + 1] 
   return real_coordinates
 
+def calculate_distance(coordinates1, coordinates2):
+  # Calculate the Euclidean distance between two coordinates
+  distance = math.sqrt((coordinates1[0] - coordinates2[0]) ** 2 + (coordinates1[1] - coordinates2[1]) ** 2)
+  return distance
+
+def calculate_response_time(distance):
+  response_time = 1.7 + 3.4 * distance
+  return response_time
+
 population = generate_population()
 fitness_history = []
+best_coordinate = None
 
 for generation in range(1, MAX_GENERATIONS + 1):
   population.sort(key=fitness)
-  best_fitness = fitness(population[0])
+  
+  best_coordinates = population[0]
+  best_real_coordinates = real_coordinates(best_coordinates)
+  
+  best_fitness = fitness(best_coordinates)
   fitness_history.append(best_fitness)
 
   parent1 = population[0]
@@ -85,7 +100,10 @@ for generation in range(1, MAX_GENERATIONS + 1):
   population[-1] = child1
   population[-2] = child2
 
-  result = f"Generation {generation} | Fitness {best_fitness} | Coordinate {real_coordinates(population[0])}"
+  distance = calculate_distance([0, 0], best_coordinates)
+  response_time = calculate_response_time(distance)
+
+  result = f"Generation {generation} | Fitness {best_fitness} | Coordinate {best_real_coordinates} | RPT: {response_time}"
 
   if REAL_TIME:
     plt.clf()
@@ -96,4 +114,18 @@ for generation in range(1, MAX_GENERATIONS + 1):
     print(result)
 
 show_fitness_history(fitness_history)
+plt.show()
+
+city_matrix_array = np.array(CITY_MATRIX)
+masked_array = np.ma.masked_array(city_matrix_array, mask=False)
+masked_array[(best_coordinates[1], best_coordinates[0])] = np.ma.masked
+plt.imshow(masked_array, cmap='inferno', interpolation='nearest')
+plt.colorbar(label='Emergency Frequency')
+plt.title('Best Emergency Unit Location')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.xticks(np.arange(10), np.arange(1, 11))
+plt.yticks(np.arange(10), np.arange(1, 11))
+plt.grid(True)
+plt.gca().invert_yaxis()  # Invert the y-axis
 plt.show()
