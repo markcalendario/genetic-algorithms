@@ -131,7 +131,8 @@ for generation in range(1, MAX_GENERATIONS + 1):
   child1 = mutate(child1)
   child2 = mutate(child2)
 
-  population[-1:] = child1, child2
+  population[-2] = child1 
+  population[-1] = child2
 
   if REAL_TIME:
     show_graph(generation, best_fitness, fitness_history, population[0])
