@@ -7,11 +7,10 @@ plt.figure(figsize=(12, 5))
 
 TARGET_WORD = input("Enter a word to guess by the guesser: ")
 POPULATION_SIZE = 100
-MAX_GENERATIONS = 50000
-MUTATION_RATE = 0.1
-CROSSOVER_RATE = 0.4
-REAL_TIME = True
-CHARACTER_SET = string.ascii_lowercase
+MUTATION_RATE = 0.9
+CROSSOVER_RATE = 0.9
+REAL_TIME = False
+CHARACTER_SET = string.ascii_letters + " "
 
 def generate_random_string():
   random_string = ''
@@ -87,19 +86,23 @@ def mutate(string):
 
   return ''.join(mutated_string)
 
-def fitness(string):
-  correct_position = 0
+def fitness(chromosome):
+  # 49 (a) - 49 (a) = 0 (best) [OK]
+  # 50 (b) - 49 (a) = 1 ()
+  cost = 0
 
-  for i in range(len(string)):
-    if string[i] == TARGET_WORD[i]:
-      correct_position += 1
-  
-  return 100 - 100 * (correct_position / len(TARGET_WORD))
+  for i in range(len(chromosome)):
+    guessN = ord(chromosome[i])
+    answerN = ord(TARGET_WORD[i])
+    cost += (guessN - answerN) ** 2
+
+  return cost
 
 population = initialize_population()
 fitness_history = []
+generation = 0
 
-for generation in range(1, MAX_GENERATIONS + 1):
+while True:
   population.sort(key=fitness)
 
   parent1 = population[0]
@@ -124,9 +127,11 @@ for generation in range(1, MAX_GENERATIONS + 1):
   else:
     print(result)
 
-  if best_word == TARGET_WORD:
+  if best_fitness == 0:
     print(f"Found target word '{TARGET_WORD}' in {generation} generations.")
     break
+
+  generation += 1
 
 show_fitness_history(fitness_history)
 plt.show()
