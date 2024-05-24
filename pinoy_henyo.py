@@ -6,9 +6,9 @@ from chart import show_fitness_history
 plt.figure(figsize=(12, 5))
 
 TARGET_WORD = input("Enter a word to guess by the guesser: ")
-POPULATION_SIZE = 100
-MUTATION_RATE = 0.9
-CROSSOVER_RATE = 0.9
+POPULATION_SIZE = 10
+CROSSOVER_RATE = 0.4
+MUTATION_RATE = 0.1
 REAL_TIME = False
 CHARACTER_SET = string.ascii_letters + " "
 
@@ -31,60 +31,35 @@ def initialize_population():
   return population
 
 def crossover(parent1, parent2):
-  # Create copy of the parents so it won't change the original value
+  # Single Point Crossover
   offspring1 = list(parent1)[:]
   offspring2 = list(parent2)[:]
-  
+
   if random.random() > CROSSOVER_RATE:
     return offspring1, offspring2
+
+  pointA = random.randint(0, len(TARGET_WORD))
+  pointB = random.randint(pointA, random.randint(pointA, len(TARGET_WORD)))
+
+  for i in range(pointA, pointB):
+    temp = offspring1[i]
+    offspring1[i] = offspring2[i]
+    offspring2[i] = temp
+
+  return "".join(offspring1), "".join(offspring2)
+
+def mutate(offspring):
+  # Random Resetting Mutation
   
-  # Choose two random crossover points
-  size = len(parent1)
-  crossover_point1 = random.randint(0, size - 1)
-  crossover_point2 = random.randint(crossover_point1 + 1, size)
-
-  # Initialize dictionaries to keep track of character mapping
-  mapping1 = {}
-  mapping2 = {}
-
-  # Apply crossover between the two crossover points
-  for i in range(crossover_point1, crossover_point2):
-    # Get the values from parents
-    temp1 = parent2[i]
-    temp2 = parent1[i]
-
-    # Swap the values in the offspring
-    offspring1[i] = temp1
-    offspring2[i] = temp2
-
-    # Update mapping dictionaries
-    mapping1[temp1] = temp2
-    mapping2[temp2] = temp1
-
-  # Apply mapping to resolve duplicates
-  for i in range(size):
-    if i < crossover_point1 or i >= crossover_point2:
-      if offspring1[i] in mapping1:
-        offspring1[i] = mapping1[offspring1[i]]
-      if offspring2[i] in mapping2:
-        offspring2[i] = mapping2[offspring2[i]]
-
-  return ''.join(offspring1), ''.join(offspring2)
-
-def mutate(string):
-  # Create copy of the string so it won't change the original value
-  mutated_string = list(string)[:]
+  mutated_offspring = list(offspring)[:]
 
   if random.random() > MUTATION_RATE:
-    return mutated_string
-  
-  target_pos = random.randint(0, len(string))
+    return mutated_offspring
 
-  for i in range(len(mutated_string)):
-    if target_pos == i:
-      mutated_string[i] = random.choice(CHARACTER_SET)
+  target_gene = random.randint(0, len(offspring) - 1)
+  mutated_offspring[target_gene] = random.choice(CHARACTER_SET)
 
-  return ''.join(mutated_string)
+  return "".join(mutated_offspring)
 
 def fitness(chromosome):
   # 49 (a) - 49 (a) = 0 (best) [OK]
@@ -115,7 +90,8 @@ while True:
   child1 = mutate(child1)
   child2 = mutate(child2)
 
-  population[-1:] = child1, child2
+  population[-1] = child2
+  population[-2] = child1
 
   result = f"Generation {generation} | Fitness {best_fitness} | Word: {best_word}"
   
