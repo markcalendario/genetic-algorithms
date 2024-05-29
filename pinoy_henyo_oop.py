@@ -41,7 +41,7 @@ class GameMaster:
 
 class Guesser:
   def __init__(self, word_length, game_master):
-    self.MAX_GENERATION = 100
+    self.MAX_GENERATION = 5000
     self.MAX_POPULATION = 10
     self.CROSSOVER_RATE = 0.4
     self.MUTATION_RATE = 0.1
