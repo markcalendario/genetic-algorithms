@@ -7,8 +7,8 @@ plt.figure(figsize=(12, 6))
 
 POPULATION_SIZE = 10
 MAX_GENERATIONS = 100
-MUTATION_RATE = 0.1
-CROSSOVER_RATE = 0.4
+MUTATION_RATE = 0.5
+CROSSOVER_RATE = 0.9
 REAL_TIME = False
 
 CITY_MATRIX = [
@@ -96,8 +96,7 @@ for generation in range(1, MAX_GENERATIONS + 1):
   population[-1] = child1
   population[-2] = child2
 
-  distance = calculate_distance([0, 0], best_coordinates)
-  response_time = calculate_response_time(distance)
+  response_time = calculate_response_time(best_fitness)
 
   result = f"Generation {generation} | Fitness {best_fitness} | Coordinate {best_coordinates} | RPT: {response_time}"
 
