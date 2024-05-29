@@ -6,10 +6,11 @@ from chart import show_fitness_history
 plt.figure(figsize=(12, 6))
 
 POPULATION_SIZE = 10
-MAX_GENERATIONS = 5000
+MAX_GENERATIONS = 100
 MUTATION_RATE = 0.1
 CROSSOVER_RATE = 0.4
-REAL_TIME = True
+REAL_TIME = False
+
 CITY_MATRIX = [
     [5, 2, 4, 8, 9, 0, 3, 3, 8, 7],
     [5, 5, 3, 4, 4, 6, 4, 1, 9, 1],
@@ -40,7 +41,7 @@ def fitness(coordinates):
 
   for x in range(MAX_CITY_ROWS - 1):
     for y in range(MAX_CITY_COLS - 1):
-      fitness += CITY_MATRIX[x][y] * (math.sqrt((x + 1 - coordinates[0]) ** 2) + math.sqrt((y + 1 - coordinates[1]) ** 2))
+      fitness += CITY_MATRIX[x][y] * (math.sqrt((x - coordinates[0]) ** 2) + math.sqrt((y - coordinates[1]) ** 2))
   
   return fitness
 
@@ -64,10 +65,6 @@ def mutate(chromosome):
 
   return mutated_chromosome
 
-def real_coordinates(coordinates):
-  real_coordinates = [coordinates[0] + 1, coordinates[1] + 1] 
-  return real_coordinates
-
 def calculate_distance(coordinates1, coordinates2):
   # Calculate the Euclidean distance between two coordinates
   distance = math.sqrt((coordinates1[0] - coordinates2[0]) ** 2 + (coordinates1[1] - coordinates2[1]) ** 2)
@@ -85,7 +82,6 @@ for generation in range(1, MAX_GENERATIONS + 1):
   population.sort(key=fitness)
   
   best_coordinates = population[0]
-  best_real_coordinates = real_coordinates(best_coordinates)
   
   best_fitness = fitness(best_coordinates)
   fitness_history.append(best_fitness)
@@ -103,7 +99,7 @@ for generation in range(1, MAX_GENERATIONS + 1):
   distance = calculate_distance([0, 0], best_coordinates)
   response_time = calculate_response_time(distance)
 
-  result = f"Generation {generation} | Fitness {best_fitness} | Coordinate {best_real_coordinates} | RPT: {response_time}"
+  result = f"Generation {generation} | Fitness {best_fitness} | Coordinate {best_coordinates} | RPT: {response_time}"
 
   if REAL_TIME:
     plt.clf()

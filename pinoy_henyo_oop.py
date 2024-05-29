@@ -41,6 +41,7 @@ class GameMaster:
 
 class Guesser:
   def __init__(self, word_length, game_master):
+    self.MAX_GENERATION = 100
     self.MAX_POPULATION = 10
     self.CROSSOVER_RATE = 0.4
     self.MUTATION_RATE = 0.1
@@ -50,10 +51,9 @@ class Guesser:
 
   def start_guessing(self):
     population = self.initialize_population()
-    generation = 1
     fitness_history = []
 
-    while True:
+    for generation in range(0, self.MAX_GENERATION + 1):
       population.sort(key=self.game_master.compute_cost)
 
       parent1 = population[0]
@@ -84,8 +84,6 @@ class Guesser:
       
       population[-2] = child1
       population[-1] = child2
-
-      generation += 1
 
     show_fitness_history(fitness_history)
     plt.show()
