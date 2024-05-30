@@ -45,6 +45,12 @@ def compute_cost(coordinates):
   
   return cost
 
+def distance(coord1, coord2):
+  x1, y1 = coord1
+  x2, y2 = coord2
+  distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+  return distance
+
 def crossover(parent1, parent2):
   offspring1 = parent1[:]
   offspring2 = parent2[:]
@@ -62,7 +68,6 @@ def mutate(chromosome):
 
   mutated_chromosome[0] = random.randint(0, MAX_CITY_ROWS - 1)
   mutated_chromosome[1] = random.randint(0, MAX_CITY_COLS - 1)
-
   return mutated_chromosome
 
 def calculate_response_time(distance):
@@ -72,6 +77,7 @@ def calculate_response_time(distance):
 population = generate_population()
 fitness_history = []
 best_coordinate = None
+first_coordinate = population[0]
 
 for generation in range(1, MAX_GENERATIONS + 1):
   population.sort(key=compute_cost)
@@ -87,11 +93,12 @@ for generation in range(1, MAX_GENERATIONS + 1):
   children = crossover(parent1, parent2)
   child1 = mutate(children[0])
   child2 = mutate(children[1])
-
+  
   population[-1] = child1
   population[-2] = child2
 
-  response_time = calculate_response_time(best_fitness)
+  the_distance = distance(first_coordinate, child1)
+  response_time = calculate_response_time(the_distance)
 
   result = f"Generation {generation} | Fitness {best_fitness} | Coordinate {best_coordinates} | RPT: {response_time}"
 
