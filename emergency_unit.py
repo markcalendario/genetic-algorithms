@@ -65,11 +65,6 @@ def mutate(chromosome):
 
   return mutated_chromosome
 
-def calculate_distance(coordinates1, coordinates2):
-  # Calculate the Euclidean distance between two coordinates
-  distance = math.sqrt((coordinates1[0] - coordinates2[0]) ** 2 + (coordinates1[1] - coordinates2[1]) ** 2)
-  return distance
-
 def calculate_response_time(distance):
   response_time = 1.7 + 3.4 * distance
   return response_time
