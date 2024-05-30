@@ -36,14 +36,14 @@ def generate_population():
 
   return population
 
-def fitness(coordinates):
-  fitness = 0
+def compute_cost(coordinates):
+  cost = 0
 
   for x in range(MAX_CITY_ROWS - 1):
     for y in range(MAX_CITY_COLS - 1):
-      fitness += CITY_MATRIX[x][y] * (math.sqrt((x - coordinates[0]) ** 2) + math.sqrt((y - coordinates[1]) ** 2))
+      cost += CITY_MATRIX[x][y] * (math.sqrt((x - coordinates[0]) ** 2) + math.sqrt((y - coordinates[1]) ** 2))
   
-  return fitness
+  return cost
 
 def crossover(parent1, parent2):
   offspring1 = parent1[:]
@@ -74,11 +74,11 @@ fitness_history = []
 best_coordinate = None
 
 for generation in range(1, MAX_GENERATIONS + 1):
-  population.sort(key=fitness)
+  population.sort(key=compute_cost)
   
   best_coordinates = population[0]
   
-  best_fitness = fitness(best_coordinates)
+  best_fitness = compute_cost(best_coordinates)
   fitness_history.append(best_fitness)
 
   parent1 = population[0]
