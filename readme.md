@@ -1,3 +1,7 @@
+# Applications of Genetic Algorithms
+
+This repository contains 3 examples of genetic algorithm including `word guessing game`, `emergency unit`, and `travelling salesman problem`. It was an activity for Introduction to Artificial Intelligence subject.
+
 ## Travelling Salesman Problem
 
 The source code for TSP can be found at `travelling_salesman.py`. It looks for the best route by computing the optimal route for a given set of cities, aiming to minimize the total distance traveled by a traveling salesman. This implementation utilizes a Genetic Algorithm (GA) approach to find an approximate solution to the Traveling Salesman Problem (TSP).
